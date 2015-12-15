@@ -1,0 +1,12 @@
+#!/bin/bash
+
+i3status | while :
+do
+  read line
+  if [ "$(pidof synergys)" ] ; then
+    synergystatus="synergy on"
+  else
+    synergystatus="synergy off"
+  fi
+  echo "$synergystatus | $line" || exit 1
+done

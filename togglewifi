@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be root to toggle wifi." 1>&2
+  exit 1
+fi
+
+BLOCKED=$(rfkill list wifi | grep Soft | awk '{print $3;}')
+if [ "$BLOCKED" == "yes" ] ; then
+  rfkill unblock wifi
+  systemctl start wicd.service
+  systemctl start wpa_supplicant.service
+else
+  rfkill block wifi
+  systemctl stop wicd.service
+  systemctl stop wpa_supplicant.service
+fi
