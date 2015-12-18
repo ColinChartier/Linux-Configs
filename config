@@ -26,6 +26,10 @@ font pango:monospace 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
+# Volume controls, these interface with thumb wheel binding in .xbindkeysrc
+bindsym XF86AudioRaiseVolume exec pactl list sinks | grep "Sink #" | grep -o "[0-9]*$" | xargs -L1 -I {} pactl set-sink-volume {} +5%
+bindsym XF86AudioLowerVolume exec pactl list sinks | grep "Sink #" | grep -o "[0-9]*$" | xargs -L1 -I {} pactl set-sink-volume {} -5%
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -41,10 +45,20 @@ bindsym $mod+d exec dmenu_run
 # toggle touchpad
 bindsym $mod+t exec sudo touchpad_toggle
 
+# toggle mouse
+bindsym $mod+y exec sudo togglemouse
+
 # toggle wifi
 bindsym $mod+w exec sudo togglewifi
 
+# toggle synergy
 bindsym $mod+s exec togglesynergy
+
+# toggle music service (mpc, mpd)
+bindsym $mod+m exec togglemusic
+
+# toggle music play/pause
+bindsym $mod+p exec togglemusicplaying
 
 # start chromium
 bindsym $mod+z exec chromium
@@ -155,10 +169,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym l resize shrink width 10 px or 10 ppt
         bindsym i resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+        bindsym j resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
