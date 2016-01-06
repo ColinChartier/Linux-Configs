@@ -13,16 +13,16 @@ fi
 ARTIST=$(exiftool -s3 -Artist "$1")
 
 if [ -z "$ARTIST" ]; then
-  echo "please enter an artist."
+  echo "artist must exist" && exit 1
 fi
 
 TITLE=$(exiftool -s3 -Title "$1")
 
 if [ -z "$TITLE" ]; then
-  echo "please enter a title."
+  echo "title must exist" && exit 1
 fi
 
 #FILE=$(printf '%q' "$ARTIST - $TITLE")
 FILE="$ARTIST - $TITLE.${1##*.}"
 echo "title: $FILE"
-cp "$1" "$DOCUMENTDIR$FILE"
+mv "$1" "$DOCUMENTDIR$FILE"
