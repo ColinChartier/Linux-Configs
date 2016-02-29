@@ -1,7 +1,0 @@
-#! /bin/bash
-
-if [ "$(pidof synergys)" ] ; then
-	killall synergys
-else
-	synergys --daemon --no-xinitthreads --no-tray
-fi
