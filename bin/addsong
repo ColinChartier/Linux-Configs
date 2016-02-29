@@ -1,0 +1,28 @@
+#! /bin/bash
+
+DOCUMENTDIR="/mnt/documents/music/"
+
+if [ -z "$1" ]; then
+  echo "Usage: addsong [file]" && exit 1
+fi
+
+if ! [ -f "$1" ]; then
+  echo "file must exist." && exit 1
+fi
+
+ARTIST=$(exiftool -s3 -Artist "$1")
+
+if [ -z "$ARTIST" ]; then
+  echo "artist must exist" && exit 1
+fi
+
+TITLE=$(exiftool -s3 -Title "$1")
+
+if [ -z "$TITLE" ]; then
+  echo "title must exist" && exit 1
+fi
+
+#FILE=$(printf '%q' "$ARTIST - $TITLE")
+FILE="$ARTIST - $TITLE.${1##*.}"
+echo "title: $FILE"
+mv "$1" "$DOCUMENTDIR$FILE"

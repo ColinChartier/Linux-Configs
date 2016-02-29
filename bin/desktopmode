@@ -1,0 +1,31 @@
+#! /bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be root to perform this action." 1>&2
+  exit 1
+fi
+
+if [ -z "$1" ] ; then
+  echo "You must specify a user to perform this action as." 1>&2
+  exit 2
+fi
+
+sudo -u "$1" synergys --daemon --no-xinitthreads --no-tray
+
+rfkill unblock wifi
+systemctl start wicd.service
+
+rfkill unblock bluetooth
+systemctl start bluetooth
+sleep .25
+blueman-applet&
+
+rfkill unblock nfc
+
+echo 'on' > '/sys/bus/usb/devices/3-4/power/control'
+
+xinput disable $(xinput list | grep -Eio 'touchpad\s*id\=[0-9]{1,2}' | grep -Eo '[0-9]{1,2}')
+
+dimscreen 45
+
+interruptbar

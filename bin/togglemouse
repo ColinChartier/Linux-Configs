@@ -1,0 +1,16 @@
+#! /bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be root to disable the mouse." 1>&2
+  exit 1
+fi
+
+STATE=$(cat /sys/bus/usb/devices/3-4/power/control)
+
+if [ "$STATE" = "on" ]; then
+  echo 'auto' > '/sys/bus/usb/devices/3-4/power/control'
+else
+  echo 'on' > '/sys/bus/usb/devices/3-4/power/control'
+fi
+
+interruptbar

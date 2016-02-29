@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ "$(systemctl --user status btsync | grep Active | grep inactive)" ] ; then
+	systemctl --user start btsync
+	echo "BitTorrent Sync Started."
+else
+	systemctl --user stop btsync
+	echo "BitTorrent Sync Stopped."
+fi
+interruptbar

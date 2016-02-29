@@ -1,0 +1,33 @@
+#! /bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be root to perform this action." 1>&2
+  exit 1
+fi
+
+if [ -z "$1" ] ; then
+  echo "You must specify a user to perform this action as." 1>&2
+  exit 2
+fi
+
+killall synergys
+
+systemctl stop wicd.service
+systemctl stop wpa_supplicant.service
+killall wicd-client
+rfkill block wifi
+
+killall blueman-manager
+killall blueman-applet
+killall obexd
+systemctl stop bluetooth
+rfkill block bluetooth
+
+rfkill block nfc
+
+echo 'auto' > '/sys/bus/usb/devices/3-4/power/control'
+dimscreen 1
+
+xinput enable $(xinput list | grep -Eio 'touchpad\s*id\=[0-9]{1,2}' | grep -Eo '[0-9]{1,2}')
+
+interruptbar

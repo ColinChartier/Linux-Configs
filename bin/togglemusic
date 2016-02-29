@@ -1,0 +1,12 @@
+#! /bin/bash
+if [ ! -z "$(pidof mpd)" ] ; then
+  mpc stop
+  mpd --kill
+else
+  mpd ~/.config/mpd/mpd.conf
+  mpc update
+  mpc ls | mpc add
+  mpc shuffle
+  mpc play
+fi
+interruptbar

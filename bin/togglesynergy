@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ -z "$(pidof alwayssynergy)" ] ; then
+	alwayssynergy&
+else
+	killall synergys
+	killall -wait alwayssynergy
+	killall synergys
+fi
+interruptbar

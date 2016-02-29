@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be root to toggle bluetooth." 1>&2
+  exit 1
+fi
+
+if [ "$(rfkill list bluetooth | grep Soft | awk '{print $3;}')" == "yes" ] ; then
+  rfkill unblock bluetooth
+  systemctl start bluetooth
+  sleep .25
+  blueman-applet&
+else
+  killall blueman-manager
+  killall blueman-applet
+  killall obexd
+  systemctl stop bluetooth
+  rfkill block bluetooth
+fi
+interruptbar
