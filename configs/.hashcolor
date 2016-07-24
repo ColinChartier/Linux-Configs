@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+SSH_COLORS=()
+if [ "$TERM" = "xterm-256color" ]; then
+  for i in {0..256}; do
+    SSH_COLORS+=("\e[38;5;${i}m")
+  done
+else
+  for i in {30..37}; do
+    SSH_COLORS+=("\e[${i}m")
+  done
+fi
+
+get_string_color() {
+  if [ "$#" -ne 1 ]; then
+    echo "Usage: get_string_color string" 1>&2
+    exit 111
+  fi
+  hash=$(md5sum <<< "$1")
+  # convert hex hash to decimal
+  hash=$((0x${hash%% *}))
+  # modulo it to the length of our colors
+  hash=`expr $hash % ${#SSH_COLORS[@]}`
+  #echo "Hash is: $hash"
+  #echo -e "${SSH_COLORS[$hash]}Derp!\e[0m"
+  echo "${SSH_COLORS[$hash]}"
+}
